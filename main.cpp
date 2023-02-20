@@ -21,19 +21,23 @@ int main(int argc, char* argv[])
 
     GLFWwindow* window;
 
-    window = glfwCreateWindow(640, 480, "Space Invaders", NULL, NULL);
+    if (!glfwInit()) return -1;
 
-    //initialize glfw
-    if(!glfwInit())
-    {
-        glfwTerminate();
-        return -1;
-    }
-    glfwMakeContextCurrent(window);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
+    window = glfwCreateWindow(640, 480, "Space Invaders", NULL, NULL);
+
+    if(!window)
+    {
+        glfwTerminate();
+        return -1;
+    }
+
+    glfwMakeContextCurrent(window);
+
 
     GLenum err = glewInit();
     if(err != GLEW_OK)
@@ -61,7 +65,7 @@ int main(int argc, char* argv[])
 
     glfwDestroyWindow(window);
     glfwTerminate();
-    
+    return 0;
 
 
 }
