@@ -21,7 +21,7 @@ public:
         session_->close();
     }
 
-    void addUserToDatabase(const std::string& host, int port, const std::string& user, const std::string& password, const std::string& database, const std::string& name, const std::string& passwordHash) {
+    void addUser( const std::string& name, const std::string& passwordHash) {
     try {
         
         session_->getDefaultSchema().createCollection("users", true);
@@ -29,7 +29,7 @@ public:
         mysqlx::Table usersTable = session_->getDefaultSchema().getTable("users");
         mysqlx::Row userRow;
         userRow.set(0,name);
-        userRow.set(1,password);
+        userRow.set(1,passwordHash);
 
         
         usersTable.insert(userRow).execute();
@@ -37,6 +37,8 @@ public:
     } catch (const mysqlx::Error& err) {
         std::cerr << "Error: " << err << std::endl;
     }
+
+    
 }
 private:
     std::string host_;
