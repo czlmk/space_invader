@@ -23,8 +23,6 @@ include_directories(${GLEW_INCLUDE_DIRS})
 # Add executable target and link libraries
 add_executable(space_invader main.cpp)
 target_link_libraries(space_invader ${GLFW_INCLUDE_DIRS} ${GLEW_LIBRARIES} mysqlcppconn server)
-#include_directories(/usr/include/mysql-cppconn-8/jdbc)
 
-#target_link_libraries(space_invader mysqlcppconn)
 
 
