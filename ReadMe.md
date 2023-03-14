@@ -1,5 +1,6 @@
 # Space Invader
 Use main branch
+
 This is a remake of the classic arcade game Space Invader developed in C++ using the GLFW and GLEW libraries. It runs on Linux and requires C++ 11 or later to compile and run.
 
 ## Installation
