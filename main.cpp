@@ -1,9 +1,9 @@
 
 #include <cstdio>
 #include <cstdint>
+
 #include <GL/glew.h>
-//#include <GL/gl.h>
-//#include <GL/glext.h>
+
 #include <GLFW/glfw3.h>
 #include "server.h"
 #define GAME_MAX_BULLETS 128
