@@ -5,6 +5,7 @@
 //#include <GL/gl.h>
 //#include <GL/glext.h>
 #include <GLFW/glfw3.h>
+#include "server.h"
 #define GAME_MAX_BULLETS 128
 
 bool game_running = false;
@@ -200,6 +201,33 @@ struct SpriteAnimation{
 };
 int main(int argc, char* argv[])
 {
+    int quit = 1;
+    std::string username,password, quit_s;
+    Server ser;
+
+    std::cout << "Enter user name: ";
+    std::cin >> username;
+
+    std::cout << "Enter password: ";
+    std::cin >> password;
+
+    ser.insertUser(username, password);
+
+    while(quit){
+
+    
+        std::cout << "Quit? y/n: ";
+        std::cin >> quit_s;
+        if(quit_s == "y"){
+            return 0;
+        }
+        else if (quit_s == "n"){
+            break;
+        }
+        else{
+            std::cout << "Wrong input." << endl;
+        }
+    }
     const size_t buffer_width = 224;
     const size_t buffer_height = 256;
 

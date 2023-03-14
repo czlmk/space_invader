@@ -1,50 +1,71 @@
-#include <iostream>
-#include <mysqlx/xdevapi.h>
-#include <memory>
+#include "server.h"
 
+Server::Server(const string& host, const string& user, const string& password, const string& database) {
+    // Initialize the MySQL Connector/C++ driver
+    try{
+    driver = get_driver_instance();
 
+    // Connect to the MySQL database
+    conn = driver->connect(host, user, password);
+    conn->setSchema(database);
 
-class MySQLCon {
-public:
-    MySQLCon(const std::string& host, int port, const std::string& user, const std::string& password, const std::string& database) :
-        host_(host), port_(port), user_(user), password_(password), database_(database)
-    {
-        try {
-            session_ = std::make_unique<mysqlx::Session>(host_, port_, user_, password_);
-            session_->getDefaultSchema().createCollection("users", true);
-        } catch (const mysqlx::Error& err) {
-            std::cerr << "Error: " << err << std::endl;
-        }
+    // Prepare a statement for inserting user records
+    stmt = conn->prepareStatement("INSERT INTO users (username, password) VALUES (?, ?)");
+            } catch (sql::SQLException &e) {
+        // Handle any SQL errors that occur
+        cerr << "Error message: " << e.what() << endl;
+        cerr << "Error code: " << e.getErrorCode() << endl;
+        cerr << "SQL state: " << e.getSQLState() << endl;
+    } catch (std::exception &e) {
+        // Handle any other exceptions that occur
+        cerr << "Exception message: " << e.what() << endl;
     }
-
-    ~MySQLCon() {
-        session_->close();
-    }
-
-    void addUser( const std::string& name, const std::string& passwordHash) {
-    try {
-        
-        session_->getDefaultSchema().createCollection("users", true);
-
-        mysqlx::Table usersTable = session_->getDefaultSchema().getTable("users");
-        mysqlx::Row userRow;
-        userRow.set(0,name);
-        userRow.set(1,passwordHash);
-
-        
-        usersTable.insert(userRow).execute();
-        
-    } catch (const mysqlx::Error& err) {
-        std::cerr << "Error: " << err << std::endl;
-    }
-
-    
 }
-private:
-    std::string host_;
-    int port_;
-    std::string user_;
-    std::string password_;
-    std::string database_;
-    std::unique_ptr<mysqlx::Session> session_;
-};
+
+Server::Server(){
+
+    try{
+        // Initialize the MySQL Connector/C++ driver
+    driver = get_driver_instance();
+
+    // Connect to the MySQL database
+    conn = driver->connect("127.0.0.1:3306", "root", "zhenyiming");
+    conn->setSchema("space_inv");
+
+    // Prepare a statement for inserting user records
+    stmt = conn->prepareStatement("INSERT INTO users (username, password) VALUES (?, ?)");
+        } catch (sql::SQLException &e) {
+        // Handle any SQL errors that occur
+        cerr << "Error message: " << e.what() << endl;
+        cerr << "Error code: " << e.getErrorCode() << endl;
+        cerr << "SQL state: " << e.getSQLState() << endl;
+    } catch (std::exception &e) {
+        // Handle any other exceptions that occur
+        cerr << "Exception message: " << e.what() << endl;
+    }
+}
+Server::~Server() {
+    // Clean up resources
+    delete stmt;
+    delete conn;
+}
+
+void Server::insertUser(const string username, const string password) {
+    try{
+    // Bind the parameters to the prepared statement
+    stmt->setString(1, username);
+    stmt->setString(2, password);
+
+    // Execute the statement
+    stmt->executeUpdate();
+        } catch (sql::SQLException &e) {
+        // Handle any SQL errors that occur
+        cerr << "Error message: " << e.what() << endl;
+        cerr << "Error code: " << e.getErrorCode() << endl;
+        cerr << "SQL state: " << e.getSQLState() << endl;
+    } catch (std::exception &e) {
+        // Handle any other exceptions that occur
+        cerr << "Exception message: " << e.what() << endl;
+    }
+
+}
