@@ -201,33 +201,45 @@ struct SpriteAnimation{
 };
 int main(int argc, char* argv[])
 {
-    int quit = 1;
-    std::string username,password, quit_s;
-    Server ser;
+    char* ifserver = new char();
+    std::cout << "Do you want run mysql server test? (y/n)" << std::endl;
+    std::cin >> ifserver;
+    if(*ifserver == 'y'){
+        
+        std::string username,password, quit_s,host,user,pass,database;
+        std::cout << "Enter database ip address: ";
+        std::cin >> host;
+        std::cout << "Enter database username: ";
+        std::cin >> user;
+        std::cout << "Enter database password: ";
+        std::cin >> pass;
+        std::cout << "Enter Schema name: ";
+        std::cin >> database;
+        Server ser(host,user,pass,database);
 
-    std::cout << "Enter user name: ";
-    std::cin >> username;
+        std::cout << "Enter player user name: ";
+        std::cin >> username;
 
-    std::cout << "Enter password: ";
-    std::cin >> password;
+        std::cout << "Enter player password: ";
+        std::cin >> password;
 
-    ser.insertUser(username, password);
+        ser.insertUser(username, password);
 
-    while(quit){
-
-    
-        std::cout << "Quit? y/n: ";
-        std::cin >> quit_s;
-        if(quit_s == "y"){
-            return 0;
-        }
-        else if (quit_s == "n"){
-            break;
-        }
-        else{
-            std::cout << "Wrong input." << endl;
+        while(true){
+            std::cout << "Quit? y/n: ";
+            std::cin >> quit_s;
+            if(quit_s == "y"){
+                return 0;
+            }
+            else if (quit_s == "n"){
+                break;
+            }
+            else{
+                std::cout << "Wrong input." << endl;
+            }
         }
     }
+    ///
     const size_t buffer_width = 224;
     const size_t buffer_height = 256;
 

@@ -29,7 +29,7 @@ Server::Server(){
     driver = get_driver_instance();
 
     // Connect to the MySQL database
-    conn = driver->connect("127.0.0.1:3306", "root", "zhenyiming");
+    conn = driver->connect("127.0.0.1:3306", "root", "root");
     conn->setSchema("space_inv");
 
     // Prepare a statement for inserting user records
